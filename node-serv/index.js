@@ -12,6 +12,7 @@ app.use(function(req, res, next) {
     next();
   })
 })
+
 router.get('/data', (req, res) => {
   res.status(200).send({wow: 33})
 });
