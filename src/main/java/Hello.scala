@@ -1,4 +1,10 @@
 
+import java.sql.Date
+import java.text.SimpleDateFormat
+//import java.time.{LocalDate, LocalDateTime}
+//import java.time.format.DateTimeFormatter
+//import java.util.Locale
+
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.StringEntity
@@ -17,19 +23,28 @@ object Hello extends App {
 
   implicit val formats = Serialization.formats(NoTypeHints)
 
-  val url = "http://localhost:3333/data"
-  val payload = Map[String, Either[String, Int]](
-    "id" -> Right(2232),
-    "cool"-> Left("beans"),
-    "data" -> Right(1234322)
-  )
-  println(payload)
-  val json = write(payload)
-  println(json)
+  val date0 = new java.util.Date()
+  println(s"raw date: $date0")
+  val date1 = new java.util.Date
+  val timeStamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(date1)
+  println(s"Time stamp: $timeStamp")
 
-  val responseString = httpPost(json, url)
+  def postToLocalServer = {
 
-  println(responseString)
+    val url = "http://localhost:3333/data"
+    val payload = Map[String, Either[String, Int]](
+      "id" -> Right(2232),
+      "cool"-> Left("beans"),
+      "data" -> Right(1234322)
+    )
+    println(payload)
+    val json = write(payload)
+    println(json)
+
+    val responseString = httpPost(json, url)
+
+    println(responseString)
+  }
 
   def httpPost(payload:String, url:String):Try[String] =
     Try {
